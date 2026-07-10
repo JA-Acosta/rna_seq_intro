@@ -93,8 +93,16 @@ dat.long <- dat.long %>%
 
 head(dat.long)
 
+# explore data
+dat.long %>%
+  filter(gene == 'BRCA1' | gene == 'BRCA2') %>%
+  group_by(gene, tissue) %>%
+  summarise(mean_FPKM = mean(FPKM),
+            median_FPKM = median(FPKM)) %>%
+  arrange(mean_FPKM)
 
 
-
+# can calc additional iqr, upper, std_dev, more
+# arrange will show in ascending but descending is -col_name
 
 
