@@ -106,3 +106,117 @@ dat.long %>%
 # arrange will show in ascending but descending is -col_name
 
 
+# ---------------------------------------
+
+# Learning Bar plots, density plots, box plots
+# scatterplots, and heatmap in R for Bioinformatics
+# using ggplot
+
+library(ggplot2)
+
+# base R allows for the generation of these visualizations
+# though it is much harder to modify
+
+# Basic format for ggplot function
+# ggplot(data, asthetics, )
+# data is the data that is going to be used
+# asthetics is what I want as my x and y axis
+
+# ggplot(dat.long, aes(x = variable, y = variable))
+# like with tidyverse, where we use the pipe opperator to add functionality, 
+# with ggplot we use the + opperator to give it functionality
+
+# right now all we are saying is that we want to create a plot that's going to
+# use the data dataframe and the aesthetics x and y variables
+# The function has no idea what type of plot we want to create so we have to
+# give it additional information on what kind of plot we want to give it
+
+# basic format or syntax
+ggplot(dat.long, aes(x = , y = )) +
+  geom_col()
+
+# can add more information with the plus operator
+
+# Barplot
+# looking at the BRCA1 gene
+dat.long %>%
+  filter(gene == "BRCA1") %>%
+  ggplot(., aes(x = samples, y = FPKM)) +
+  geom_col()
+
+# don't know which is the tumor or normal; use fill to see which are which
+dat.long %>%
+  filter(gene == "BRCA1") %>%
+  ggplot(., aes(x = samples, y = FPKM, fill = tissue)) +
+  geom_col()
+
+# compare the expression of samples for BRCA1
+
+# How does the distribution of... compare across the tumor and non tumor
+dat.long %>%
+  filter(gene == "BRCA1") %>%
+  ggplot(., aes(x = FPKM, fill = tissue)) + # fill at tissue since want to
+  # compare how distribution of expression compares between tumor and normal
+  geom_density() # the normal tissue is obfuscating the brest tumor tissue.
+
+dat.long %>%
+  filter(gene == "BRCA1") %>%
+  ggplot(., aes(x = FPKM, fill = tissue)) +
+  geom_density(alpha = .6)
+
+# Boxplot
+
+# compare between samples having different metastasis status
+
+dat.long %>%
+  filter(gene == "BRCA1") %>%
+  ggplot(., aes(x = metastasis, y = FPKM)) +
+  geom_boxplot()
+
+# convert into a violin plot
+dat.long %>%
+  filter(gene == "BRCA1") %>%
+  ggplot(., aes(x = metastasis, y = FPKM)) +
+  geom_violin()
+
+
+# Scatter Plot
+# Compare the expression between two genes
+
+dat.long %>%
+  filter(gene == "BRCA1" | gene == "BRCA2") %>%
+  spread(key = gene, value = FPKM) %>%
+  ggplot(., aes(x = BRCA1, y = BRCA2)) +
+  geom_point()
+
+# how to fit a line of best fit to this plot
+# can't say if it is significant without a correlation test
+
+dat.long %>%
+  filter(gene == "BRCA1" | gene == "BRCA2") %>%
+  spread(key = gene, value = FPKM) %>%
+  ggplot(., aes(x = BRCA1, y = BRCA2)) +
+  geom_point() +
+  geom_smooth(method = 'lm', se = FALSE) # lm is straight line
+  # se is no confidence intervals
+
+
+# seperate out the two different tissue types
+dat.long %>%
+  filter(gene == "BRCA1" | gene == "BRCA2") %>%
+  spread(key = gene, value = FPKM) %>%
+  ggplot(., aes(x = BRCA1, y = BRCA2, colour = tissue)) + # why do we use the
+  # color and not the fill??
+  geom_point() +
+  geom_smooth(method = 'lm', se = FALSE)
+
+# 
+
+
+
+
+
+
+
+
+
