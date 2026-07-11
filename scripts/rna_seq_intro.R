@@ -210,13 +210,54 @@ dat.long %>%
   geom_point() +
   geom_smooth(method = 'lm', se = FALSE)
 
-# 
+# Heatmaps
 
+# easy to visualize expressions of multiple genes across the samples and compare
+# the expressions of all these genese simultaniously
 
+genes.of.interest <- c('BRCA1', 'BRCA2', 'TP53', 'ALK', 'MYCN')
 
+# compare these five genes across all the samples
 
+# start fetching the data
 
+dat.long %>%
+  filter(gene %in% genes.of.interest) %>%
+  ggplot(., aes(x = samples, y = gene, fill = FPKM)) +
+  geom_tile()
 
+# darker the color is lower the expression
+# lighter the color is the lighter the expression
+# contrast @ with changing the colors of the scale
 
+dat.long %>%
+  filter(gene %in% genes.of.interest) %>%
+  ggplot(., aes(x = samples, y = gene, fill = FPKM)) +
+  geom_tile() +
+  scale_fill_gradient(low = "white", high = 'red')
 
+# heatmap allows us to make multiple comparisons and see trends across the data
+# we can visualize trends across the data easily
 
+# Saving the plots in multiple formats, publications, or records
+# save it to a var or
+
+p <- dat.long %>%
+  filter(gene %in% genes.of.interest) %>%
+  ggplot(., aes(x = samples, y = gene, fill = FPKM)) +
+  geom_tile() +
+  scale_fill_gradient(low = "white", high = 'red')
+
+# or funct ggsave()
+
+ggsave(p, filename = "heatmap_save1.pdf", width = 10, height =  8)
+# can save as png too, can provide the width and height as in, cm, or other units
+
+# another way to save plots
+pdf("heatmap_save2.pdf", width = 10, height = 8)
+dat.long %>%
+  filter(gene %in% genes.of.interest) %>%
+  ggplot(., aes(x = samples, y = gene, fill = FPKM)) +
+  geom_tile() +
+  scale_fill_gradient(low = "white", high = 'red')
+dev.off()
