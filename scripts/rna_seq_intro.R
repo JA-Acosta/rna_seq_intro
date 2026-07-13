@@ -1,6 +1,6 @@
 # RNA-Seq Introduction Notebooks 
 # Authors: Acosta, Joe
-# Date: 07/07/2026
+# Date: 07/11/2026
 
 # ---------------------------------------
 
@@ -152,6 +152,7 @@ dat.long %>%
 
 # compare the expression of samples for BRCA1
 
+# Density Plot:
 # How does the distribution of... compare across the tumor and non tumor
 dat.long %>%
   filter(gene == "BRCA1") %>%
@@ -261,3 +262,53 @@ dat.long %>%
   geom_tile() +
   scale_fill_gradient(low = "white", high = 'red')
 dev.off()
+
+# ---------------------------------------
+
+# Understanding the difference between RPKM/FPKM and TPM
+
+# when to use them and when they are not appropriate to be used
+
+# Replicates: give us confidence that the observed effect is a result of biological
+# phenomenon and not as a side effect of a technical issue
+
+# Two types of replicates
+
+# Technical Replicates: are several measurements taken from the same organism/sample
+
+# Biological Replicates: are several measurements each taken from independent
+# organisms/samples
+
+# Counts: reads that map to a gene that gives us the expression of the gene in
+# that experiment
+
+# Counts Matrix has rows as genes and columns as sample replicates and values are
+# the counts
+
+# We must normalize the counts because it doesn't account for biasis
+
+# Gene length
+# Sequencing Depth
+
+# RPKM: normalizes for gene length and sequencing depth
+# higher the RPKM, higher the expression
+# used to quantify transcripts from single-ended reads
+# Cannot be used for Differential gene expression;
+# RPKM doesn't account biasis in difference in biological conditions
+
+# FPKM: analogous to RPKM
+# main difference is that it is used for paired data rather than single ended
+# Higher FPKM is higher the expression
+# cant be used for DESEq2 either
+
+# TPM: normalizes for gene length and sequencing
+# is better suited to compare expression bethween samples
+# cant be used for DESEq2 either
+
+
+
+
+
+
+
+
